@@ -18,4 +18,16 @@ pipeline {
             }
         }
     }
+
+    post {
+        success {
+            script {
+                if (pullRequest.mergeable) {
+                    pullRequest.merge('merge commit message here')
+                } else {
+                    pullRequest.addLabel('No automerge')
+                }
+            }
+        }
+    }
 }
