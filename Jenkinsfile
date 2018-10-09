@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building..'
+                echo 'BuSSSilding..'
             }
         }
         stage('Test') {
@@ -15,6 +15,23 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
+            }
+        }
+    }
+
+    post {
+        success {
+            script {
+                if (pullRequest.mergeable) {
+                    pullRequest.merge([
+                        commitMessage : 'merge commit message here',
+                        commitTitle : ' my title',
+                        sha : pullRequest.head,
+                        mergeMethod : 'merge'
+                    ] )
+                } else {
+                    pullRequest.addLabel('No automerge')
+                }
             }
         }
     }
