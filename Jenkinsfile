@@ -1,7 +1,8 @@
 
 pipeline {
-    agent any
-
+     docker {
+        image 'ubuntu:14.04'
+    }
     stages {
         stage('Build') {
             steps {
