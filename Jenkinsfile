@@ -1,6 +1,11 @@
-pipeline {
-    agent any
 
+pipeline {
+    agent {
+     docker {
+        image 'ubuntu:14.04'
+    }
+
+    }
     stages {
         stage('Build') {
             steps {
@@ -15,23 +20,12 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
+                sh 'ls'
             }
         }
-    }
-
-    post {
-        success {
-            script {
-                if (pullRequest.mergeable) {
-                    pullRequest.merge([
-                        commitMessage : 'merge commit message here',
-                        commitTitle : ' my title',
-                        sha : pullRequest.head,
-                        mergeMethod : 'merge'
-                    ] )
-                } else {
-                    pullRequest.addLabel('No automerge')
-                }
+        stage('Fail'){
+             steps {
+                sh 'echo "Fail!"; exit 1'
             }
         }
     }
