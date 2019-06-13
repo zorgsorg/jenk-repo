@@ -22,15 +22,9 @@ pipeline {
     post {
         success {
             script {
-                if (pullRequest.mergeable) {
-                    pullRequest.merge([
-                        commitMessage : 'merge commit message here',
-                        commitTitle : ' my title',
-                        sha : pullRequest.head,
-                        mergeMethod : 'merge'
-                    ] )
-                } else {
-                    pullRequest.addLabel('No automerge')
+                githubPRComment comment: githubPRMessage('Build ${BUILD_NUMBER} ${BUILD_STATUS}')
+                 if (env.CHANGE_ID) {
+                                         pullRequest.addLabel('Build Failed')
                 }
             }
         }
