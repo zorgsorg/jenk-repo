@@ -23,5 +23,10 @@ pipeline {
                 sh 'ls'
             }
         }
+        stage('Fail'){
+             steps {
+                sh 'echo "Fail!"; exit 1'
+            }
+        }
     }
 }
